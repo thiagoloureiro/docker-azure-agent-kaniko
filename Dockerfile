@@ -1,4 +1,9 @@
-FROM debian:stable-slim
+FROM ubuntu:24.04
+ENV TARGETARCH="linux-x64"
+
+RUN apt update
+RUN apt upgrade -y
+RUN apt install -y curl git jq libicu74
 
 # Install dependencies
 RUN apt-get update && apt-get install -y \
