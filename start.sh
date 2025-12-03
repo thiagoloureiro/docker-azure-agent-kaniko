@@ -48,6 +48,10 @@ print_header() {
 # Let the agent ignore the token env variables
 export VSO_AGENT_IGNORE="AZP_TOKEN,AZP_TOKEN_FILE"
 
+print_header "0. Starting buildkitd daemon..."
+# Start BuildKit daemon in background
+buildkitd --addr tcp://0.0.0.0:1234 &
+
 print_header "1. Determining matching Azure Pipelines agent..."
 
 AZP_AGENT_PACKAGES=$(curl -LsS \
@@ -86,6 +90,7 @@ print_header "3. Configuring Azure Pipelines agent..."
   --acceptTeeEula & wait $!
 
 print_header "4. Running Azure Pipelines agent..."
+
 
 chmod +x ./run.sh
 
