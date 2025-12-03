@@ -6,17 +6,11 @@ RUN apt upgrade -y
 RUN apt install -y curl git jq libicu74
 
 # Install dependencies
-RUN apt-get update && apt-get install -y \
-    curl git ca-certificates unzip jq \
-    && rm -rf /var/lib/apt/lists/*
+# Install buildctl & buildkitd
+ENV BUILDKIT_VERSION=v0.26.2
 
-# Install Kaniko
-ENV KANIKO_DIR=/kaniko
-RUN mkdir -p $KANIKO_DIR && cd $KANIKO_DIR && \
-    curl -LO https://github.com/GoogleContainerTools/kaniko/releases/download/v1.23.2/executor \
-    && chmod +x executor
-
-ENV PATH="/kaniko:${PATH}"
+RUN curl -sSL https://github.com/moby/buildkit/releases/download/${BUILDKIT_VERSION}/buildkit-${BUILDKIT_VERSION}.linux-amd64.tar.gz \
+  | tar -xz -C /usr/local
 
 WORKDIR /azp/
 
